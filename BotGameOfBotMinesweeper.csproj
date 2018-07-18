@@ -42,10 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MineSweeperModels\MineSweeperMap.cs" />
-    <Compile Include="MineSweeperLogic\MineSweeperMapCreator.cs" />
-    <Compile Include="MineSweeperModels\MineSweeperMapTile.cs" />
-    <Compile Include="MineSweeperModels\MineSweeperMapTileValueEnums.cs" />
+    <Compile Include="MineSweeperModels\Map.cs" />
+    <Compile Include="MineSweeperLogic\MapCreator.cs" />
+    <Compile Include="MineSweeperModels\MapTile.cs" />
+    <Compile Include="MineSweeperModels\MapTileValueEnums.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

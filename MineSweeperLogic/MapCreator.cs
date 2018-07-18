@@ -17,6 +17,8 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
         private int MapWidth { get; }
         private double MinePercentage { get; }
 
+        private List<MapTile> MapTileList { get; set; }
+
         Random rand = new Random();
 
         public MapCreator(int mapHeight, int mapWidth, double minePercentage)
@@ -45,15 +47,15 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
         {
             Map map = InitializeMineSweeperMap();
 
-            List<MapTile> mapTiles = new List<MapTile>();
-            for(int currentRow = 0; currentRow < MapHeight; ++currentRow)
+            MapTileList = new List<MapTile>();
+            for (int currentRow = 0; currentRow < MapHeight; ++currentRow)
             {
-                GenerateMapTileRow(mapTiles, currentRow);
+                GenerateMapTileRow(currentRow);
             }
 
-            // TODO: DIE ANZAHL DER IN DER NÄHE BEFINDLICHEN MINEN MUSS NOCH GEZÄHLT WERDEN
+            CountSurroundingMinesAndSetCountForMapTiles();
 
-            map.MapTiles = mapTiles.ToArray();
+            map.MapTiles = MapTileList.ToArray();
             return map;
         }
 
@@ -67,11 +69,11 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
             };
         }
 
-        private void GenerateMapTileRow(List<MapTile> mapTiles, int currentRow)
+        private void GenerateMapTileRow(int currentRow)
         {
-            for(int currentColumn = 0; currentColumn < MapWidth; ++currentColumn)
+            for (int currentColumn = 0; currentColumn < MapWidth; ++currentColumn)
             {
-                mapTiles.Add(GenerateMapTile(currentRow, currentColumn));
+                MapTileList.Add(GenerateMapTile(currentRow, currentColumn));
             }
         }
 
@@ -87,14 +89,63 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
 
         private MapTileValueEnums DetermineMapTileValue()
         {
-            if((rand.Next(0, 100) + 0.0 + rand.NextDouble()) <= MAP_MINEPERCENTAGE_MIN)
+            return ((rand.Next(0, 100) + 0.0 + rand.NextDouble()) <= MAP_MINEPERCENTAGE_MIN)
+                ? MapTileValueEnums.MINE
+                : MapTileValueEnums.EMPTY;
+        }
+
+        private void CountSurroundingMinesAndSetCountForMapTiles()
+        {
+            foreach (MapTile mapTile in MapTileList)
             {
-                return MapTileValueEnums.MINE;
+                mapTile.SurroundingMines = CountSurroundingMines(mapTile);
             }
-            else
+        }
+
+        private int CountSurroundingMines(MapTile mapTile)
+        {
+            int surroundingMines = 0;
+            if (!IsMineTile(mapTile))
             {
-                return MapTileValueEnums.EMPTY;
+                foreach (MapTile surroundingMapTile in MapTileList)
+                {
+                    if (IsSurroundingMapTile(mapTile, surroundingMapTile))
+                    {
+                        ++surroundingMines;
+                    }
+                }
             }
+            return surroundingMines;
+        }
+
+        private bool IsMineTile(MapTile mapTile)
+        {
+            return mapTile.TileValue == MapTileValueEnums.MINE
+                ? true
+                : false;
+        }
+
+        private bool IsSurroundingMapTile(MapTile mapTile, MapTile surroundingMapTile)
+        {
+            return MapTileIsDiagonalSurrounding(mapTile, surroundingMapTile) || MapTileIsCrossSurrounding(mapTile, surroundingMapTile)
+                ? true
+                : false;
+        }
+
+        private bool MapTileIsDiagonalSurrounding(MapTile mapTile, MapTile surroundingMapTile)
+        {
+            return (surroundingMapTile.XPos == mapTile.XPos + 1 || surroundingMapTile.XPos == mapTile.XPos - 1) &&
+                   (surroundingMapTile.YPos == mapTile.YPos + 1 || surroundingMapTile.YPos == mapTile.YPos - 1)
+                ? true
+                : false;
+        }
+
+        private bool MapTileIsCrossSurrounding(MapTile mapTile, MapTile surroundingMapTile)
+        {
+            return surroundingMapTile.XPos == mapTile.XPos && (surroundingMapTile.YPos == mapTile.YPos + 1 || surroundingMapTile.YPos == mapTile.YPos - 1) ||
+                   surroundingMapTile.YPos == mapTile.YPos && (surroundingMapTile.XPos == mapTile.XPos + 1 || surroundingMapTile.XPos == mapTile.XPos - 1)
+                ? true
+                : false;
         }
     }
 }
