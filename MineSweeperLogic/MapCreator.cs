@@ -105,7 +105,7 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
         private int CountSurroundingMines(MapTile mapTile)
         {
             int surroundingMines = 0;
-            if (!IsMineTile(mapTile))
+            if (!mapTile.IsMineTile())
             {
                 foreach (MapTile surroundingMapTile in MapTileList)
                 {
@@ -118,34 +118,21 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
             return surroundingMines;
         }
 
-        private bool IsMineTile(MapTile mapTile)
-        {
-            return mapTile.TileValue == MapTileValueEnums.MINE
-                ? true
-                : false;
-        }
-
         private bool IsSurroundingMapTile(MapTile mapTile, MapTile surroundingMapTile)
         {
-            return MapTileIsDiagonalSurrounding(mapTile, surroundingMapTile) || MapTileIsCrossSurrounding(mapTile, surroundingMapTile)
-                ? true
-                : false;
+            return MapTileIsDiagonalSurrounding(mapTile, surroundingMapTile) || MapTileIsCrossSurrounding(mapTile, surroundingMapTile);
         }
 
         private bool MapTileIsDiagonalSurrounding(MapTile mapTile, MapTile surroundingMapTile)
         {
             return (surroundingMapTile.XPos == mapTile.XPos + 1 || surroundingMapTile.XPos == mapTile.XPos - 1) &&
-                   (surroundingMapTile.YPos == mapTile.YPos + 1 || surroundingMapTile.YPos == mapTile.YPos - 1)
-                ? true
-                : false;
+                   (surroundingMapTile.YPos == mapTile.YPos + 1 || surroundingMapTile.YPos == mapTile.YPos - 1);
         }
 
         private bool MapTileIsCrossSurrounding(MapTile mapTile, MapTile surroundingMapTile)
         {
             return surroundingMapTile.XPos == mapTile.XPos && (surroundingMapTile.YPos == mapTile.YPos + 1 || surroundingMapTile.YPos == mapTile.YPos - 1) ||
-                   surroundingMapTile.YPos == mapTile.YPos && (surroundingMapTile.XPos == mapTile.XPos + 1 || surroundingMapTile.XPos == mapTile.XPos - 1)
-                ? true
-                : false;
+                   surroundingMapTile.YPos == mapTile.YPos && (surroundingMapTile.XPos == mapTile.XPos + 1 || surroundingMapTile.XPos == mapTile.XPos - 1);
         }
     }
 }

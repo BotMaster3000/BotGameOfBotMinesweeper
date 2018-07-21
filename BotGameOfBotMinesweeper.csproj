@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MineSweeperLogic\Extensions.cs" />
+    <Compile Include="MineSweeperLogic\GameLogic.cs" />
     <Compile Include="MineSweeperModels\Map.cs" />
     <Compile Include="MineSweeperLogic\MapCreator.cs" />
     <Compile Include="MineSweeperModels\MapTile.cs" />
