@@ -20,16 +20,17 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
             ErrorLog = new List<string>();
         }
 
-        public void EnterCoordinate(int xPos, int yPos)
+        public void UncoverAtCoordinate(int xPos, int yPos)
         {
             MapTile tile = GetMapTile(xPos, yPos);
             if(tile != null)
             {
+                MakeTileVisible(tile);
                 CheckForGameOver(tile);
             }
         }
 
-        private MapTile GetMapTile(int xPos, int yPos)
+        public MapTile GetMapTile(int xPos, int yPos)
         {
             if (IsValidCoordinate(xPos, yPos))
             {
@@ -46,8 +47,13 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
 
         private bool IsValidCoordinate(int xPos, int yPos)
         {
-            return (xPos > 0 && xPos < Map.Width) &&
-                   (yPos > 0 && yPos < Map.Height);
+            return (xPos >= 0 && xPos < Map.Width) &&
+                   (yPos >= 0 && yPos < Map.Height);
+        }
+
+        private void MakeTileVisible(MapTile tile)
+        {
+            tile.IsVisible = true;
         }
 
         private void CheckForGameOver(MapTile tile)

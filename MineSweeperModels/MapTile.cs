@@ -12,5 +12,6 @@ namespace BotGameOfBotMinesweeper.MineSweeperModels
         public int YPos { get; set; }
         public MapTileValueEnums TileValue { get; set; }
         public int SurroundingMines { get; set; }
+        public bool IsVisible { get; set; }
     }
 }

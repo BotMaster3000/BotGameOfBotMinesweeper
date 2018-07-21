@@ -19,6 +19,8 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
 
         private List<MapTile> MapTileList { get; set; }
 
+        public List<string> ErrorList { get; set; }
+
         Random rand = new Random();
 
         public MapCreator(int mapHeight, int mapWidth, double minePercentage)
@@ -105,9 +107,9 @@ namespace BotGameOfBotMinesweeper.MineSweeperLogic
         private int CountSurroundingMines(MapTile mapTile)
         {
             int surroundingMines = 0;
-            if (!mapTile.IsMineTile())
+            foreach (MapTile surroundingMapTile in MapTileList)
             {
-                foreach (MapTile surroundingMapTile in MapTileList)
+                if (surroundingMapTile.IsMineTile())
                 {
                     if (IsSurroundingMapTile(mapTile, surroundingMapTile))
                     {
